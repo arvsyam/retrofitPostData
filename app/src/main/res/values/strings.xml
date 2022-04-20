@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">RetrofitPost</string>
+
+    <string-array name="array_kategori">
+
+        <item>ijin sakit</item>
+        <item>ijin anak sakit</item>
+    </string-array>
+</resources>
