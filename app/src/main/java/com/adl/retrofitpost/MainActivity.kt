@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
         initComponent()
 
 
-        RetrofitConfig().getIjin().getAll().enqueue(object : Callback<GetIjinResponse>{
+        RetrofitConfig().getService().getAll().enqueue(object : Callback<GetIjinResponse>{
             override fun onResponse(
                 call: Call<GetIjinResponse>,
                 response: Response<GetIjinResponse>
@@ -118,7 +118,7 @@ class MainActivity : AppCompatActivity() {
         })
         btn_add_new.setOnClickListener({
 
-            RetrofitConfig().getIjin().addDataWithImage(createRB(spn_kategori.selectedItem.toString()),createRB(et_from_date.text.toString()),createRB(et_untill_date.text.toString()),createRB(et_perihal.text.toString()),createRB(et_keterangan.text.toString()),uploadImage(photoURI,"lampiran")).enqueue(object : Callback<PostIjinResponse>{
+            RetrofitConfig().getService().addDataWithImage(createRB(spn_kategori.selectedItem.toString()),createRB(et_from_date.text.toString()),createRB(et_untill_date.text.toString()),createRB(et_perihal.text.toString()),createRB(et_keterangan.text.toString()),uploadImage(photoURI,"lampiran")).enqueue(object : Callback<PostIjinResponse>{
                 override fun onResponse(
                     call: Call<PostIjinResponse>,
                     response: Response<PostIjinResponse>

@@ -46,7 +46,7 @@ data class IjinItem(
 ) : Parcelable
 
 @Parcelize
-data class Data(
+data class Dataa(  // must be data not dataa
 
 	@field:SerializedName("ijin")
 	val ijin: List<IjinItem?>? = null

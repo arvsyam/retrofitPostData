@@ -5,7 +5,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class RetrofitConfig {
+class RetrofitConfigTracking {
 
     fun getInterceptor() : OkHttpClient {
         val logging = HttpLoggingInterceptor()
@@ -22,5 +22,5 @@ class RetrofitConfig {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
     }
-    fun getService() = getRetrofit().create(IIjin::class.java)
+    fun getService() = getRetrofit().create(ITracking::class.java)
 }
