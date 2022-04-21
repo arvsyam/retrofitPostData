@@ -2,6 +2,7 @@ package com.adl.retrofitpost
 
 import android.app.Activity
 import android.app.DatePickerDialog
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -27,21 +28,30 @@ import kotlinx.android.synthetic.main.activity_main.et_perihal
 import kotlinx.android.synthetic.main.activity_main.et_untill_date
 import kotlinx.android.synthetic.main.activity_main.photo
 import kotlinx.android.synthetic.main.activity_main_temp.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import retrofit2.Call
 
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
 
+    lateinit var photoURI: Uri
+
+
     private val cameraLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
         if (it.resultCode == Activity.RESULT_OK) {
             val uri = it.data?.data!!
-            // Use the uri to load the image
+
             photo.setImageURI(uri)
+            photoURI = uri
 
             Log.d("uri image","${uri}")
         }
@@ -72,6 +82,19 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    fun createRB(data:String):
+            RequestBody {
+        return RequestBody.create(MultipartBody.FORM,data)
+    }
+
+    fun uploadImage(uri:Uri,param:String): MultipartBody.Part {
+        val file: File = File(uri.path)
+        val rb:RequestBody =  file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+
+        return MultipartBody.Part.createFormData(param,file.name,rb)
+
+    }
+
     fun selectDate(et : EditText){
         var cal = Calendar.getInstance()
         val dateListener = DatePickerDialog.OnDateSetListener({
@@ -95,7 +118,7 @@ class MainActivity : AppCompatActivity() {
         })
         btn_add_new.setOnClickListener({
 
-            RetrofitConfig().getIjin().addNewIjin(spn_kategori.selectedItem.toString(),et_from_date.text.toString(),et_untill_date.text.toString(),et_perihal.text.toString(),et_keterangan.text.toString()).enqueue(object : Callback<PostIjinResponse>{
+            RetrofitConfig().getIjin().addDataWithImage(createRB(spn_kategori.selectedItem.toString()),createRB(et_from_date.text.toString()),createRB(et_untill_date.text.toString()),createRB(et_perihal.text.toString()),createRB(et_keterangan.text.toString()),uploadImage(photoURI,"lampiran")).enqueue(object : Callback<PostIjinResponse>{
                 override fun onResponse(
                     call: Call<PostIjinResponse>,
                     response: Response<PostIjinResponse>
