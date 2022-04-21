@@ -10,7 +10,7 @@ import android.os.Bundle
 
 @Suppress("MissingPermission")
 class LocationHelper {
-    var LOCATION_REFRESH_TIME = 60000 // 60s
+    var LOCATION_REFRESH_TIME = 5000 // 5s
     var LOCATION_REFRESH_DISTANCE = 0 // jarak minimum refresh
 
     fun startListeningUserLocation(context: Context, myListener:MyLocationListener){

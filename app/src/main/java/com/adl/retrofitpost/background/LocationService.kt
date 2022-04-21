@@ -62,39 +62,47 @@ class LocationService:Service() {
             startForeground(1,builder.build())
 
         }
+
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
        LocationHelper().startListeningUserLocation(this,object:MyLocationListener{
            override fun onLocationChanged(location: Location) {
-               val localDate= Calendar.getInstance()
-               val sdf = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ENGLISH)
-               val time = sdf.format(localDate.time)
+               if (isServiceStarted) {
+                   val localDate = Calendar.getInstance()
+                   val sdf = SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ENGLISH)
+                   val time = sdf.format(localDate.time)
 
-               Log.d("time","${time}")
+                   Log.d("time", "${time}")
 
-               mLocation = location
-               mLocation?.let{
-                   Log.d("SERVICE SEDANG BERJALAN LOKASINYA ADALAH"," ${it?.longitude} -- ${it?.latitude}")
+                   mLocation = location
+                   mLocation?.let {
+                       Log.d(
+                           "SERVICE SEDANG BERJALAN LOKASINYA ADALAH",
+                           " ${it?.longitude} -- ${it?.latitude}"
+                       )
+                   }
+                   RetrofitConfigTracking().getService()
+                       .addTrack("Pay", "${mLocation?.latitude}", "${mLocation?.longitude}", time)
+                       .enqueue(object : Callback<PostTrackingResponse> {
+                           override fun onResponse(
+                               call: Call<PostTrackingResponse>,
+                               response: Response<PostTrackingResponse>
+                           ) {
+                               if (response.isSuccessful()) {
+                                   Log.d("response", "saved")
+                               } else {
+                                   response.body().toString()
+                                   Log.d("response", "failed to save")
+                               }
+                           }
+
+                           override fun onFailure(call: Call<PostTrackingResponse>, t: Throwable) {
+                               Log.e("error request", t.localizedMessage, t)
+                           }
+
+                       })
                }
-               RetrofitConfigTracking().getService().addTrack("Pay","${mLocation?.latitude}","${mLocation?.longitude}",time).enqueue(object : Callback<PostTrackingResponse> {
-                   override fun onResponse(
-                       call: Call<PostTrackingResponse>,
-                       response: Response<PostTrackingResponse>
-                   ) {
-                       if(response.isSuccessful()){
-                           Log.d("response","saved")
-                       }else{
-                           response.body().toString()
-                           Log.d("response","failed to save")
-                       }
-                   }
-
-                   override fun onFailure(call: Call<PostTrackingResponse>, t: Throwable) {
-                       Log.e("error request",t.localizedMessage,t)
-                   }
-
-               })
            }
 
        })
@@ -102,7 +110,10 @@ class LocationService:Service() {
         return super.onStartCommand(intent, flags, startId)
     }
 
-
+    override fun onDestroy() {
+        super.onDestroy()
+        isServiceStarted = false
+    }
 
 
     override fun onBind(p0: Intent?): IBinder? {

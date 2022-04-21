@@ -30,6 +30,10 @@ class LocationServiceActivity : AppCompatActivity() {
         btn_service.setOnClickListener({
             ContextCompat.startForegroundService(this, Intent(this,LocationService::class.java))
         })
+        btn_stop_service.setOnClickListener({
+            stopService(Intent(this,LocationService::class.java))
+        })
+
         btn_search_tracker.setOnClickListener({
             searching()
         })

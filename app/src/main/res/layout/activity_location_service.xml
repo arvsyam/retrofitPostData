@@ -10,16 +10,20 @@
         android:id="@+id/btn_service"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Button"
+        android:text="Run service"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.476"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.253" />
 
     <EditText
         android:id="@+id/et_seacrh_tracker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="204dp"
+        android:layout_marginStart="116dp"
+        android:layout_marginTop="584dp"
         android:ems="10"
         android:hint="Search here"
         android:inputType="textPersonName"
@@ -35,4 +39,15 @@
         android:text="search"
         app:layout_constraintEnd_toEndOf="@+id/et_seacrh_tracker"
         app:layout_constraintTop_toBottomOf="@+id/et_seacrh_tracker" />
+
+    <Button
+        android:id="@+id/btn_stop_service"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="68dp"
+        android:text="stop service"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_service" />
 </androidx.constraintlayout.widget.ConstraintLayout>
